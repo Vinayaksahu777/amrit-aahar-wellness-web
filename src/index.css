@@ -2,41 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* Amrit Aahar Design System - Premium Ayurvedic Products
+All colors MUST be HSL for consistency and theming.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Brand Colors */
+    --golden-amber: 45 86% 51%;           /* #E6A817 */
+    --deep-forest: 122 38% 25%;          /* #2C5F2D */
+    --saffron-orange: 35 100% 60%;       /* #FF9933 */
+    --soft-cream: 60 100% 96%;           /* #FFF9E6 */
+    --light-sage: 120 33% 91%;           /* #E6EFE6 */
+    --rich-brown: 25 30% 22%;            /* #4A3728 */
+    --deep-charcoal: 0 0% 18%;           /* #2E2E2E */
+    --turmeric-yellow: 51 100% 50%;      /* #FFC300 */
+    --neem-green: 100 28% 65%;           /* #7EA172 */
+
+    /* Semantic Design Tokens */
+    --background: var(--soft-cream);
+    --foreground: var(--rich-brown);
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: var(--rich-brown);
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: var(--rich-brown);
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: var(--golden-amber);
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: var(--light-sage);
+    --secondary-foreground: var(--deep-forest);
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: var(--light-sage);
+    --muted-foreground: var(--deep-forest);
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: var(--saffron-orange);
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 45 20% 85%;
+    --input: 45 20% 92%;
+    --ring: var(--golden-amber);
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -94,12 +106,88 @@ All colors MUST be HSL.
   }
 }
 
+    /* Gradients */
+    --gradient-golden: linear-gradient(135deg, hsl(var(--golden-amber)), hsl(var(--turmeric-yellow)));
+    --gradient-nature: linear-gradient(135deg, hsl(var(--deep-forest)), hsl(var(--neem-green)));
+    --gradient-warm: linear-gradient(135deg, hsl(var(--saffron-orange)), hsl(var(--golden-amber)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--soft-cream)), hsl(var(--light-sage)));
+
+    /* Shadows */
+    --shadow-warm: 0 10px 30px -10px hsl(var(--golden-amber) / 0.3);
+    --shadow-soft: 0 4px 20px -5px hsl(var(--rich-brown) / 0.1);
+    --shadow-elevated: 0 20px 40px -10px hsl(var(--rich-brown) / 0.15);
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .dark {
+    --background: var(--rich-brown);
+    --foreground: var(--soft-cream);
+
+    --card: var(--deep-charcoal);
+    --card-foreground: var(--soft-cream);
+
+    --popover: var(--deep-charcoal);
+    --popover-foreground: var(--soft-cream);
+
+    --primary: var(--golden-amber);
+    --primary-foreground: var(--rich-brown);
+
+    --secondary: var(--deep-forest);
+    --secondary-foreground: var(--soft-cream);
+
+    --muted: var(--deep-charcoal);
+    --muted-foreground: var(--light-sage);
+
+    --accent: var(--saffron-orange);
+    --accent-foreground: var(--rich-brown);
+
+    --border: var(--deep-forest);
+    --input: var(--deep-charcoal);
+    --ring: var(--golden-amber);
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .hero-pattern {
+    background-image: 
+      radial-gradient(circle at 25% 25%, hsl(var(--golden-amber) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, hsl(var(--deep-forest) / 0.1) 0%, transparent 50%);
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-colors px-6 py-3 rounded-lg font-medium;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 border border-primary/20 transition-colors px-6 py-3 rounded-lg font-medium;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
   }
 }
