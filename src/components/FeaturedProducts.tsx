@@ -2,8 +2,11 @@ import { Star, ShoppingCart, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import productsImage from "@/assets/products-collection.jpg";
+import { useCart } from "@/hooks/useCart";
 
 const FeaturedProducts = () => {
+  const { addToCart, loading } = useCart();
+  
   const products = [
     {
       id: 1,
@@ -138,7 +141,12 @@ const FeaturedProducts = () => {
                 </div>
 
                 {/* Add to Cart */}
-                <Button className="w-full group" variant="default">
+                <Button 
+                  className="w-full group" 
+                  variant="default"
+                  onClick={() => addToCart(product)}
+                  disabled={loading}
+                >
                   <ShoppingCart className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                   Add to Cart
                 </Button>

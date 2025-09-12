@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Menu, X, ShoppingCart, Search } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import AuthButton from "./AuthButton";
+import CartButton from "./CartButton";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,19 +49,25 @@ const Header = () => {
             <Button variant="ghost" size="icon" className="hidden md:flex">
               <Search className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon">
-              <ShoppingCart className="h-5 w-5" />
-            </Button>
             
-            {/* Mobile menu button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
+            {/* Desktop Auth and Cart */}
+            <div className="hidden md:flex items-center space-x-2">
+              <CartButton />
+              <AuthButton />
+            </div>
+            
+            {/* Mobile Actions */}
+            <div className="md:hidden flex items-center space-x-2">
+              <CartButton />
+              <AuthButton />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
+            </div>
           </div>
         </div>
 

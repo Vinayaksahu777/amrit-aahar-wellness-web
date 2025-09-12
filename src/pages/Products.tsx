@@ -6,8 +6,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import productsImage from "@/assets/products-collection.jpg";
+import { useCart } from "@/hooks/useCart";
 
 const Products = () => {
+  const { addToCart, loading } = useCart();
+  
   const categories = [
     "All Products",
     "Herbs & Roots", 
@@ -217,7 +220,11 @@ const Products = () => {
                       </div>
                     </div>
 
-                    <Button className="w-full">
+                    <Button 
+                      className="w-full"
+                      onClick={() => addToCart(product)}
+                      disabled={loading}
+                    >
                       Add to Cart
                     </Button>
                   </CardContent>
