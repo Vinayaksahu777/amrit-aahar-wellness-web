@@ -58,6 +58,8 @@ export type Database = {
           phone_number: string
           products: Json
           total_amount: number
+          updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string | null
@@ -69,6 +71,8 @@ export type Database = {
           phone_number: string
           products: Json
           total_amount: number
+          updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string | null
@@ -80,6 +84,8 @@ export type Database = {
           phone_number?: string
           products?: Json
           total_amount?: number
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
