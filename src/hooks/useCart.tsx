@@ -16,7 +16,8 @@ export interface CartItem {
 export interface Product {
   id: number;
   name: string;
-  price: string;
+  price: number | string;
+  image?: string;
 }
 
 export const useCart = () => {
@@ -72,13 +73,13 @@ export const useCart = () => {
         // Add new item
         const { error } = await supabase
           .from("cart_items")
-          .insert({
+          .insert([{
             user_id: session.user.id,
             product_id: product.id,
             product_name: product.name,
-            product_price: product.price,
+            product_price: typeof product.price === 'number' ? product.price.toString() : product.price,
             quantity: 1,
-          });
+          }]);
 
         if (error) throw error;
       }

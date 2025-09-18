@@ -89,6 +89,39 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          availability_status: boolean
+          category: string
+          created_at: string
+          id: number
+          image_url: string | null
+          name: string
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          availability_status?: boolean
+          category: string
+          created_at?: string
+          id?: number
+          image_url?: string | null
+          name: string
+          price: number
+          updated_at?: string
+        }
+        Update: {
+          availability_status?: boolean
+          category?: string
+          created_at?: string
+          id?: number
+          image_url?: string | null
+          name?: string
+          price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           address: string | null
@@ -97,6 +130,7 @@ export type Database = {
           full_name: string | null
           id: string
           phone_number: string | null
+          role: string | null
           updated_at: string
           user_id: string
         }
@@ -107,6 +141,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone_number?: string | null
+          role?: string | null
           updated_at?: string
           user_id: string
         }
@@ -117,6 +152,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone_number?: string | null
+          role?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -127,7 +163,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

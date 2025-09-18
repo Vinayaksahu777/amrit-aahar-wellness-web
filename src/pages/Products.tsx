@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Leaf, Filter, Star, Grid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -5,101 +6,70 @@ import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import productsImage from "@/assets/products-collection.jpg";
+import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/hooks/useCart";
+import productsImage from "@/assets/products-collection.jpg";
 
 const Products = () => {
-  const { addToCart, loading } = useCart();
+  const { addToCart, loading: cartLoading } = useCart();
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("All Products");
   
   const categories = [
     "All Products",
-    "Herbs & Roots", 
-    "Spices & Seasonings",
-    "Dry Fruits",
+    "Herbs & Spices", 
     "Essential Oils",
-    "Herbal Teas"
+    "Supplements",
+    "Teas & Beverages",
+    "Beauty & Skincare",
+    "Health Products"
   ];
 
-  const products = [
-    {
-      id: 1,
-      name: "Organic Turmeric Powder",
-      hindiName: "हल्दी पाउडर",
-      price: "₹299",
-      originalPrice: "₹399",
-      image: productsImage,
-      rating: 4.8,
-      reviews: 156,
-      category: "Spices & Seasonings",
-      benefits: "Anti-inflammatory, Immunity booster",
-      forms: ["Raw", "Powder"]
-    },
-    {
-      id: 2,
-      name: "Pure Ashwagandha Root",
-      hindiName: "अश्वगंधा जड़",
-      price: "₹459",
-      originalPrice: "₹599",
-      image: productsImage,
-      rating: 4.9,
-      reviews: 203,
-      category: "Herbs & Roots",
-      benefits: "Stress relief, Energy enhancement",
-      forms: ["Raw", "Powder", "Capsules"]
-    },
-    {
-      id: 3,
-      name: "Premium Neem Leaves",
-      hindiName: "नीम पत्ती",
-      price: "₹199",
-      originalPrice: "₹249",
-      image: productsImage,
-      rating: 4.7,
-      reviews: 89,
-      category: "Herbs & Roots",
-      benefits: "Blood purification, Skin health",
-      forms: ["Dried", "Powder"]
-    },
-    {
-      id: 4,
-      name: "Himalayan Saffron",
-      hindiName: "केसर",
-      price: "₹2999",
-      originalPrice: "₹3499",
-      image: productsImage,
-      rating: 5.0,
-      reviews: 67,
-      category: "Spices & Seasonings",
-      benefits: "Mood enhancement, Antioxidant",
-      forms: ["Premium Threads"]
-    },
-    {
-      id: 5,
-      name: "Organic Amla Powder",
-      hindiName: "आंवला पाउडर",
-      price: "₹249",
-      originalPrice: "₹319",
-      image: productsImage,
-      rating: 4.6,
-      reviews: 124,
-      category: "Dry Fruits",
-      benefits: "Vitamin C, Hair health",
-      forms: ["Dried", "Powder"]
-    },
-    {
-      id: 6,
-      name: "Pure Brahmi Extract",
-      hindiName: "ब्राह्मी",
-      price: "₹379",
-      originalPrice: "₹459",
-      image: productsImage,
-      rating: 4.8,
-      reviews: 91,
-      category: "Herbs & Roots",
-      benefits: "Memory enhancement, Mental clarity",
-      forms: ["Powder", "Oil"]
+  useEffect(() => {
+    fetchProducts();
+    
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('products-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'products'
+        },
+        () => {
+          fetchProducts();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('availability_status', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  const filteredProducts = selectedCategory === "All Products" 
+    ? products 
+    : products.filter(product => product.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-background">
@@ -133,9 +103,10 @@ const Products = () => {
                 {categories.map((category) => (
                   <Button
                     key={category}
-                    variant={category === "All Products" ? "default" : "outline"}
+                    variant={category === selectedCategory ? "default" : "outline"}
                     size="sm"
                     className="mb-2"
+                    onClick={() => setSelectedCategory(category)}
                   >
                     {category}
                   </Button>
@@ -154,83 +125,60 @@ const Products = () => {
             </div>
 
             {/* Products Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {products.map((product) => (
-                <Card key={product.id} className="card-hover group bg-card border-border">
-                  <div className="relative overflow-hidden rounded-t-lg">
-                    <img
-                      src={product.image}
-                      alt={`${product.name} - Premium Ayurvedic product`}
-                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-4 left-4 bg-accent text-accent-foreground text-xs font-medium px-2 py-1 rounded-full">
-                      {Math.round(((parseInt(product.originalPrice.slice(1)) - parseInt(product.price.slice(1))) / parseInt(product.originalPrice.slice(1))) * 100)}% OFF
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-muted-foreground">Loading products...</p>
+              </div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">No products found in this category.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredProducts.map((product) => (
+                  <Card key={product.id} className="card-hover group bg-card border-border">
+                    <div className="relative overflow-hidden rounded-t-lg">
+                      <img
+                        src={product.image_url || productsImage}
+                        alt={`${product.name} - Premium Ayurvedic product`}
+                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
-                  </div>
 
-                  <CardContent className="p-6">
-                    <div className="mb-2">
-                      <Badge variant="secondary" className="text-xs">
-                        {product.category}
-                      </Badge>
-                    </div>
-                    
-                    <h3 className="font-serif font-semibold text-lg mb-1">{product.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-3">{product.hindiName}</p>
-
-                    {/* Rating */}
-                    <div className="flex items-center space-x-2 mb-3">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < Math.floor(product.rating)
-                                ? "text-yellow-400 fill-current"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        ))}
+                    <CardContent className="p-6">
+                      <div className="mb-2">
+                        <Badge variant="secondary" className="text-xs">
+                          {product.category}
+                        </Badge>
                       </div>
-                      <span className="text-sm font-medium">{product.rating}</span>
-                      <span className="text-sm text-muted-foreground">({product.reviews})</span>
-                    </div>
+                      
+                      <h3 className="font-serif font-semibold text-lg mb-3">{product.name}</h3>
 
-                    <p className="text-sm text-muted-foreground mb-4">{product.benefits}</p>
-
-                    {/* Forms */}
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {product.forms.map((form) => (
-                        <span
-                          key={form}
-                          className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-full"
-                        >
-                          {form}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Price */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xl font-bold text-primary">{product.price}</span>
-                        <span className="text-sm text-muted-foreground line-through">
-                          {product.originalPrice}
-                        </span>
+                      {/* Price */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-xl font-bold text-primary">${product.price}</span>
+                        </div>
                       </div>
-                    </div>
 
-                    <Button 
-                      className="w-full"
-                      onClick={() => addToCart(product)}
-                      disabled={loading}
-                    >
-                      Add to Cart
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                      <Button 
+                        className="w-full"
+                        onClick={() => addToCart({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          image: product.image_url || productsImage
+                        })}
+                        disabled={cartLoading}
+                      >
+                        Add to Cart
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>
