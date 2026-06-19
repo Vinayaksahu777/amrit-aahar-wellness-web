@@ -1,73 +1,81 @@
-# Welcome to your Lovable project
+# 🌿 Amrit Aahar Wellness Web
 
-## Project info
+Amrit Aahar Wellness Web is a modern Ayurvedic wellness and product showcase platform built using React and Vite. The project demonstrates modern web development practices along with DevOps concepts such as Docker containerization and CI/CD automation using Jenkins.
 
-**URL**: https://lovable.dev/projects/6e603421-8abc-4bcd-8478-5283e908b2c6
+## 🔗 Live Demo
 
-## How can I edit this code?
+🌐 Live Website: https://amrit-aahar-wellness-web.lovable.app/
 
-There are several ways of editing your application.
+📂 GitHub Repository: https://github.com/Vinayaksahu777/amrit-aahar-wellness-web
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6e603421-8abc-4bcd-8478-5283e908b2c6) and start prompting.
+## 🚀 Features
 
-Changes made via Lovable will be committed automatically to this repo.
+* Modern and responsive user interface
+* Ayurvedic wellness product showcase
+* Mobile-friendly design
+* Fast performance with Vite
+* Dockerized deployment
+* Jenkins CI/CD pipeline integration
+* Automated deployment workflow
+* Cloud deployment ready
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠️ Tech Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Frontend
 
-Follow these steps:
+* React
+* Vite
+* JavaScript
+* HTML5
+* CSS3
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### DevOps & Deployment
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+* Git
+* GitHub
+* Docker
+* Jenkins
+* CI/CD Pipeline
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+## 🔄 CI/CD Workflow
+
+```text
+Developer
+    ↓
+GitHub Push
+    ↓
+Jenkins Pipeline
+    ↓
+Docker Build
+    ↓
+Container Deployment
+    ↓
+Updated Application
 ```
 
-**Edit a file directly in GitHub**
+### Key Improvements
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Before CI/CD:
 
-**Use GitHub Codespaces**
+* Manual build and deployment
+* Higher chance of deployment errors
+* Time-consuming release process
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+After CI/CD:
 
-## What technologies are used for this project?
+* Automated build and deployment
+* Faster release cycle
+* Consistent deployments using Docker
+* Improved maintainability and reliability
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🎯 Project Impact
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/6e603421-8abc-4bcd-8478-5283e908b2c6) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+This project evolved from a manually deployed frontend application into a DevOps-enabled application with Docker containerization and Jenkins-based CI/CD automation, reducing deployment effort and improving deployment consistency.
